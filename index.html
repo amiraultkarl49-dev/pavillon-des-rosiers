@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pavillon des Rosiers</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Jost:wght@300;400;500;600&display=swap">
+<style>
+/* Layout: velvet-curtain gala site. Oxblood night, champagne gold, ivory text. Sticky masthead, one page at a time, ornamental dividers. */
+:root {
+  --bg: #130810; --panel: #1E0F1B; --panel2: #29152A; --line: #4B2B3E;
+  --fg: #F4EADD; --muted: #BDA7B1; --gold: #E5C27D; --gold2: #A9854A; --rose: #EA86A2; --wine: #5A1530;
+  --display: "Cormorant Garamond", "Didot", "Bodoni 72", Georgia, serif;
+  --body: "Jost", "Avenir Next", "Century Gothic", system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.7; font-weight: 300; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 56px; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+/* velvet curtains on both sides, wide screens only */
+body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background:
+  repeating-linear-gradient(90deg, rgba(90,21,48,0.55) 0 14px, rgba(60,12,32,0.55) 14px 28px) left top / 12vw 100% no-repeat,
+  repeating-linear-gradient(90deg, rgba(60,12,32,0.55) 0 14px, rgba(90,21,48,0.55) 14px 28px) right top / 12vw 100% no-repeat;
+  -webkit-mask-image: linear-gradient(90deg, #000, transparent 11vw, transparent calc(100% - 11vw), #000); mask-image: linear-gradient(90deg, #000, transparent 11vw, transparent calc(100% - 11vw), #000); opacity: 0.55; }
+@media (max-width: 70rem) { body::after { display: none; } }
+a { color: var(--gold); }
+a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.wrap { max-width: 1040px; margin-inline: auto; }
+
+.mast { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); border-bottom: 1px solid var(--gold2); box-shadow: 0 3px 0 var(--bg), 0 4px 0 var(--line); }
+.mast-in { display: flex; align-items: center; gap: 4px 22px; flex-wrap: wrap; padding-top: 10px; }
+.logo { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--fg); }
+.logo svg { width: 40px; height: 40px; flex: none; }
+.logo span { font-family: var(--display); font-size: 1.7rem; font-weight: 600; letter-spacing: 0.04em; white-space: nowrap; }
+.nav { display: flex; flex-wrap: wrap; gap: 2px; flex: 1 1 100%; min-width: 0; }
+.nav a { flex: none; padding: 9px 8px 8px; text-decoration: none; color: var(--muted); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; border-bottom: 2px solid transparent; white-space: nowrap; }
+.nav a:hover { color: var(--fg); }
+button.top { background: none; border: 0; border-bottom: 2px solid transparent; cursor: pointer; font: inherit; padding: 9px 8px 8px; color: var(--muted); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
+button.top::after { content: ""; display: inline-block; margin-left: 7px; width: 5px; height: 5px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: translateY(-2px) rotate(45deg); }
+button.top:hover, .grp.open button.top { color: var(--fg); }
+button.top.here { color: var(--gold); border-bottom-color: var(--gold); }
+.grp { position: relative; }
+.sub { display: none; position: absolute; top: 100%; left: 0; min-width: 14rem; background: var(--panel); border: 1px solid var(--gold2); z-index: 25; padding: 6px 0; box-shadow: 0 14px 30px rgba(0,0,0,0.5); }
+.sub.r { left: auto; right: 0; }
+.grp.open .sub { display: block; }
+.sub a { display: block; padding: 11px 18px; border: 0; letter-spacing: 0.08em; }
+.sub a:hover { background: var(--panel2); color: var(--fg); }
+.sub a[aria-current="page"] { color: var(--gold); border: 0; }
+.nav a[aria-current="page"] { color: var(--gold); border-bottom-color: var(--gold); }
+
+main { padding-top: 36px; min-height: 60vh; }
+@media (prefers-reduced-motion: no-preference) { main > * { animation: rise 0.45s ease both; } @keyframes rise { from { opacity: 0; transform: translateY(8px); } } }
+.eyebrow { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); margin: 0 0 10px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(3rem, 11vw, 6rem); letter-spacing: 0.01em; line-height: 0.98; }
+h2 { font-size: clamp(2.2rem, 6vw, 3.4rem); line-height: 1.05; }
+h3 { font-size: 1.55rem; line-height: 1.2; }
+.lede { font-size: 1.15rem; max-width: 40rem; text-wrap: pretty; margin: 14px 0 0; }
+p { margin: 0 0 14px; max-width: 40rem; text-wrap: pretty; }
+.muted { color: var(--muted); }
+.orn { display: flex; align-items: center; gap: 14px; margin: 26px 0 30px; color: var(--gold2); }
+.orn::before, .orn::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold2)); }
+.orn::after { background: linear-gradient(270deg, transparent, var(--gold2)); }
+.orn i { width: 9px; height: 9px; transform: rotate(45deg); border: 1px solid var(--gold); display: block; }
+.stack { display: flex; flex-direction: column; gap: 18px; }
+.grid { display: grid; gap: 16px; }
+.g2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
+.g3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); }
+.card { position: relative; background: linear-gradient(180deg, var(--panel2), var(--panel)); border: 1px solid var(--line); padding: 22px; min-width: 0; }
+.card::before, .card::after { content: ""; position: absolute; width: 16px; height: 16px; border: 1px solid var(--gold2); pointer-events: none; }
+.card::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+.card::after { right: -1px; bottom: -1px; border-left: 0; border-top: 0; }
+.card p:last-child { margin-bottom: 0; }
+a.card { display: block; text-decoration: none; color: var(--fg); }
+a.card:hover { border-color: var(--gold2); }
+.k { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+.card h3 { margin-bottom: 8px; }
+.quote { border-left: 2px solid var(--gold); padding: 4px 0 4px 20px; font-family: var(--display); font-style: italic; font-weight: 500; font-size: clamp(1.6rem, 4.5vw, 2.3rem); line-height: 1.25; max-width: 38rem; margin: 0; }
+.quote small { display: block; margin-top: 10px; font-family: var(--body); font-style: normal; font-size: 0.8125rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.notice { border: 1px solid var(--rose); background: color-mix(in srgb, var(--rose) 9%, var(--bg)); padding: 14px 18px; max-width: 40rem; }
+.notice p { margin: 0; }
+.sech { margin: 40px 0 16px; }
+
+/* hero */
+.hero { position: relative; text-align: center; padding: 30px 0 30px; overflow: hidden; }
+.hero-mask { width: min(170px, 42vw); margin: 0 auto 6px; display: block; filter: drop-shadow(0 6px 24px rgba(229,194,125,0.25)); }
+.hero .lede { margin-inline: auto; }
+.hero .notice { margin: 22px auto 0; text-align: left; }
+.count { display: flex; justify-content: center; gap: 12px; margin: 28px 0 8px; }
+.count div { min-width: 4.6rem; padding: 12px 8px 10px; border: 1px solid var(--gold2); background: rgba(19,8,16,0.85); }
+.count b { display: block; font-family: var(--display); font-size: 2.7rem; line-height: 1; color: var(--gold); font-variant-numeric: tabular-nums; font-weight: 600; }
+.count span { font-size: 0.6875rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+.when { font-size: 0.875rem; letter-spacing: 0.1em; color: var(--muted); }
+
+.facts { display: grid; margin: 0; }
+.facts div { display: grid; grid-template-columns: 8.5rem 1fr; gap: 12px; padding: 9px 0; border-top: 1px solid var(--line); }
+.facts div:first-child { border-top: 0; }
+.facts dt { font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); padding-top: 3px; }
+.facts dd { margin: 0; min-width: 0; }
+.two { display: grid; gap: 28px; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-items: start; }
+@media (max-width: 52rem) { .two { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 30rem) { .facts div { grid-template-columns: 1fr; gap: 0; } }
+
+.tl { list-style: none; margin: 0; padding: 0; }
+.tl li { display: grid; grid-template-columns: 5.6rem 1fr; gap: 6px 22px; padding: 18px 0; border-top: 1px solid var(--line); }
+.tl li:first-child { border-top: 0; }
+.tl .y { font-family: var(--display); font-size: 2.3rem; font-weight: 600; line-height: 1; color: var(--gold); }
+.tl h3 { font-size: 1.45rem; margin-bottom: 4px; }
+.tl p { margin: 0; color: var(--muted); }
+.tl .meta { font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold2); margin-top: 6px; }
+.tl li.last .y, .tl li.last h3 { color: var(--rose); }
+@media (max-width: 30rem) { .tl li { grid-template-columns: 1fr; } }
+
+.stat .n { font-family: var(--display); font-size: 3rem; font-weight: 600; color: var(--gold); line-height: 1.05; }
+.stat p { color: var(--muted); margin-top: 6px; font-size: 0.9375rem; }
+.clip { border: 1px solid var(--line); background: var(--panel); padding: 18px 20px; }
+.clip .src { font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.clip h3 { font-size: 1.35rem; margin: 6px 0; }
+.clip p { margin: 0; font-style: italic; }
+
+.guest { display: grid; grid-template-columns: 72px 1fr; gap: 6px 16px; align-items: start; }
+.guest svg, .mk-card svg { overflow: visible; }
+.guest svg { width: 72px; height: 72px; }
+.guest .nm { font-family: var(--display); font-weight: 600; font-size: 1.7rem; line-height: 1.1; }
+.guest .mk { font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); }
+.guest p { grid-column: 1 / -1; margin: 6px 0 0; color: var(--muted); font-size: 0.9375rem; }
+.guest .since { grid-column: 1 / -1; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold2); margin-top: 4px; }
+.mk-card { text-align: center; }
+.mk-card svg { width: 110px; height: 110px; margin-bottom: 8px; }
+.mk-card h3 { font-size: 1.7rem; }
+.mk-card .role { font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.mk-card p { margin-inline: auto; color: var(--muted); font-size: 0.9375rem; }
+
+.trib { margin: 0; }
+.trib blockquote { margin: 0 0 12px; font-size: 1.0625rem; text-wrap: pretty; }
+.trib blockquote::before { content: "\201C"; font-family: var(--display); font-size: 3rem; line-height: 0; color: var(--gold2); vertical-align: -0.4em; margin-right: 4px; }
+.trib figcaption { font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.trib figcaption b { color: var(--gold); font-weight: 500; }
+
+.prog { list-style: none; margin: 0; padding: 0; }
+.prog li { display: grid; grid-template-columns: 6.8rem 1fr; gap: 6px 22px; padding: 16px 0; border-top: 1px solid var(--line); align-items: baseline; }
+.prog li:first-child { border-top: 0; }
+.prog .t { font-family: var(--display); font-size: 2.3rem; font-weight: 600; color: var(--gold); line-height: 1; }
+.prog h3 { font-size: 1.45rem; margin-bottom: 2px; }
+.prog p { margin: 0; color: var(--muted); }
+@media (max-width: 30rem) { .prog li { grid-template-columns: 1fr; } }
+
+.menu { display: grid; gap: 22px; }
+.menu h3 { font-size: 1.5rem; color: var(--gold); margin-bottom: 6px; }
+.menu ul { list-style: none; margin: 0; padding: 0; }
+.menu li { padding: 8px 0; border-top: 1px dotted var(--line); }
+.menu li:first-child { border-top: 0; }
+.menu li b { font-weight: 500; display: block; }
+.menu li span { color: var(--muted); font-size: 0.9375rem; }
+
+.planbox { overflow-x: auto; }
+.plan { width: 100%; min-width: 520px; height: auto; display: block; }
+.plan text { font-family: var(--body); font-size: 12px; fill: var(--fg); letter-spacing: 0.04em; }
+.plan .sm { font-size: 10px; fill: var(--muted); }
+.plan .room { fill: var(--panel2); stroke: var(--gold2); stroke-width: 1.2; }
+.plan .out { fill: none; stroke: var(--line); stroke-width: 1; stroke-dasharray: 4 4; }
+.plan .mez { fill: color-mix(in srgb, var(--wine) 60%, var(--panel)); stroke: var(--gold); stroke-width: 1.2; stroke-dasharray: 5 3; }
+
+details.faq { border-top: 1px solid var(--line); padding: 14px 0; }
+details.faq:last-of-type { border-bottom: 1px solid var(--line); }
+details.faq summary { cursor: pointer; font-family: var(--display); font-size: 1.35rem; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+details.faq summary::-webkit-details-marker { display: none; }
+details.faq summary::after { content: "+"; color: var(--gold); font-family: var(--body); }
+details.faq[open] summary::after { content: "\2212"; }
+details.faq p { margin: 10px 0 0; color: var(--muted); }
+
+.lock { max-width: 30rem; }
+.field { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+.field input { flex: 1 1 12rem; min-width: 0; background: var(--bg); border: 1px solid var(--gold2); color: var(--fg); font: inherit; font-size: 1.0625rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 10px 14px; }
+.btn { background: var(--gold); color: #1A0E08; border: 0; font: inherit; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; padding: 11px 20px; cursor: pointer; }
+.btn:disabled { opacity: 0.55; cursor: default; }
+.err { color: var(--rose); margin-top: 10px; min-height: 1.5em; }
+.tw { overflow-x: auto; border: 1px solid var(--line); }
+table { border-collapse: collapse; width: 100%; min-width: 440px; background: var(--panel); }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+th { font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+tr:last-child td { border-bottom: 0; }
+.photo { margin: 0; max-width: 46rem; background: #0b0509; border: 1px solid var(--gold2); padding: 8px 8px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+.photo svg { display: block; width: 100%; height: auto; }
+.photo figcaption { padding: 10px 4px 12px; font-family: var(--display); font-style: italic; font-size: 1.1rem; line-height: 1.3; }
+.photo figcaption span { display: block; font-family: var(--body); font-style: normal; font-size: 0.6875rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold2); margin-top: 3px; }
+a.clip { display: block; text-decoration: none; color: var(--fg); }
+a.clip:hover { border-color: var(--gold2); }
+a.clip .more { display: inline-block; margin-top: 10px; font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
+.art .src { font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.art > p { font-size: 1.0625rem; }
+.art .photo { margin: 0 0 24px; max-width: 40rem; }
+.gh { display: flex; align-items: center; gap: 20px; }
+.gh svg { width: 96px; height: 96px; flex: none; overflow: visible; }
+a.guest:hover { border-color: var(--gold2); }
+.cipher { font-family: var(--display); font-size: clamp(2.4rem, 9vw, 3.6rem); letter-spacing: 0.3em; color: var(--gold); text-align: center; padding: 12px 0 8px; font-weight: 600; }
+.alpha { display: flex; flex-wrap: wrap; gap: 2px; justify-content: center; margin-bottom: 6px; color: var(--muted); font-size: 0.8125rem; }
+.alpha span { width: 1.6rem; text-align: center; border-bottom: 1px solid var(--line); }
+footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); text-align: center; color: var(--muted); font-size: 0.8125rem; letter-spacing: 0.12em; text-transform: uppercase; }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <div class="mast-in">
+      <a class="logo" href="#accueil" aria-label="Pavillon des Rosiers, accueil">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 2 L38 20 L20 38 L2 20 Z" fill="none" stroke="#E5C27D" stroke-width="1.4"/><path d="M20 8 L32 20 L20 32 L8 20 Z" fill="none" stroke="#A9854A" stroke-width="1"/><text x="20" y="25" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="600" font-size="14" fill="#E5C27D">LV</text></svg>
+        <span>Pavillon des Rosiers</span>
+      </a>
+      <nav class="nav" id="nav" aria-label="Pages du site"></nav>
+    </div>
+  </header>
+  <main id="view" tabindex="-1"></main>
+  <footer>Pavillon des Rosiers · Anjou · Le Bal des Masques depuis 2019</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var VAULT = {"salt":"P+Q1ATgy8hSjpMzQsXlneg==","iv":"OXdMmZNJIAUMeTQy","data":"AnpF6JxZ9CvH9H9Nst2zfC1xCBGi8I0ov95ql171lpcX5GWXAkZqcWeqeWm/7wev6HAM8OD2Di/0W1lCoy5tGKgb/wZfgJ9Kt+Xo5vtb9LDcT5NOnKuwFZAnesOOdinGoi/nz1e0G32vQaWQRhmZAAL1XbAuwOjGGQy+bBmyQpMxqAZiNIb3iHO39YUzDMQ/NEWYQeamOtpqOh6j8FQLgZjjl8Dhqf2dOloBOe0nd9tJeKN5qAIXMssYF99Vc7mVVDIgfrAbSHf90eXSpY9P7pp4jvp2ycfElQmuz6SPvVYD830/HTSpVStwX5WvHoFTE7p5ECKp+y3UY9nBrBTGrSGc5u2vvyi64s+v0nC9j/ggVY0h/8MkTCDAJDmYhnEoe554AjbLokcjj3thfoNkwtouA7RKrHuB7TRYwlbUFVCeU5TBDhSEWZgd/rwlahXn2uldBHWAoXkwInoy+RtkfPp7R3LLa1iPN7tDnQ08va7zkHhIz4Plv8LLl3P4bRt67qkDqwK1QxxyeDaD8IYj01Ihm8S/D/J4ogfETlVvQAHR6xnyd019Uk6q3bCRYJ5uRNd49rChp1xduwYvRDGCVwN90qfgwz4jyVZijmTcZxFl19YIrhWqqLZ71vNQxpptQKpNOsMrpfDc5AffvfgEHQJkvyLVXxy7oa5jk9MMJxGfLKzh5IiTT48k7fPSQP4rSjpy2mGZtNjPRUVDIjzCy+Sj50u0jHrzsC2Mi8MZW/UsN7cX1Ekahr79v6OKL5kqgYCfefIQA+NUS/SpVWQbfD43","iter":150000};
+  var VAULT2 = {"salt":"Y/SjOS2eV2hVKVHr/qVEGg==","iv":"60ujVxVWjSG98wEp","data":"Cjlp7205YufiOFJWAcMZrd4JNzo6+pHpDMiYfvaulPm4KPI0lkm0My2GoiUCTUHoWiErr8Y44SWu/R2SW/ruqiwDQDUwp6IJvZmNAmeT7pedH6Df5V/bBr8wgR4pDcLESWb8SOdtcWgopGS2cRI9a7H0LzHWH0A14yk5tkscOE9F5li3RAh9BnzfhHhC8q7ist/75LYDSWnODOouBkjtkKoYdvEdwpZ6VF2dq7KXZ3h1vugpleKA+OWsOwWeYCXQlh+yRXkbL+EppXjOIUYGvtT5kPGHbKP0WtLUGy/LAfoaqtTOf8jAupr6kvT02dlVn6Uk/xJOs42pn6PsqHm8QeG0a5h5yfBbXoa0L4QNfvr7kw/CoiESpm4=","iter":150000};
+  var OPEN_AT = new Date(2026, 11, 26, 20, 0, 0).getTime();
+  var TEASER_VIDEO = "";
+  var unlocked = null, teaser = null;
+  function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+  function b64(s) { var bin = atob(s), out = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i); return out; }
+  function normalize(s) { return s.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/\s+/g, "").toUpperCase(); }
+  function openVault(pw, vault) {
+    var V = vault || VAULT;
+    var subtle = window.crypto && window.crypto.subtle;
+    if (!subtle) return Promise.reject(new Error("nocrypto"));
+    return subtle.importKey("raw", new TextEncoder().encode(pw), "PBKDF2", false, ["deriveKey"]).then(function (km) {
+      return subtle.deriveKey({ name: "PBKDF2", salt: b64(V.salt), iterations: V.iter, hash: "SHA-256" }, km, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    }).then(function (key) {
+      return subtle.decrypt({ name: "AES-GCM", iv: b64(V.iv) }, key, b64(V.data));
+    }).then(function (buf) { return JSON.parse(new TextDecoder().decode(buf)); });
+  }
+
+  /* ---------- Masques ---------- */
+  function mask(kind) {
+    var body = '<path d="M5 28 Q6 9 32 11 Q58 9 59 28 Q58 46 44 48 Q38 49 32 42 Q26 49 20 48 Q6 46 5 28Z" fill="FILL" stroke="#E5C27D" stroke-width="1.6"/>';
+    var eyes = '<ellipse cx="21" cy="29" rx="6.5" ry="4" fill="#130810" stroke="#E5C27D" stroke-width="1"/><ellipse cx="43" cy="29" rx="6.5" ry="4" fill="#130810" stroke="#E5C27D" stroke-width="1"/>';
+    var fill = "#29152A", extra = "", under = "";
+    if (kind === "Colombine") extra = '<path d="M50 14 Q64 -2 61 24" fill="none" stroke="#E5C27D" stroke-width="1.6"/><path d="M52 16 Q58 8 58 18" fill="none" stroke="#EA86A2" stroke-width="1.2"/>';
+    if (kind === "Pierrot") { fill = "#F4EADD"; extra = '<path d="M17 36 Q13 43 17 46 Q21 43 17 36Z" fill="#A9854A"/>'; }
+    if (kind === "Arlequin") extra = '<path d="M12 18 L22 26 M22 18 L12 26 M28 15 L36 22 M36 15 L28 22 M42 18 L52 26 M52 18 L42 26" stroke="#EA86A2" stroke-width="1.4" fill="none"/>';
+    if (kind === "Pantalon") under = '<path d="M32 33 Q46 44 36 60" fill="none" stroke="#F4EADD" stroke-width="3.2" stroke-linecap="round"/>';
+    if (kind === "Il Dottore") under = '<path d="M28 33 L32 63 L37 33Z" fill="#A9854A" stroke="#E5C27D" stroke-width="1.2"/>';
+    if (kind === "Scaramouche") { fill = "#130810"; extra = '<path d="M8 22 Q32 14 56 22" fill="none" stroke="#E5C27D" stroke-width="1.2"/>'; }
+    if (kind === "Brighella") extra = '<path d="M15 41 Q24 36 32 41 Q40 36 49 41" fill="none" stroke="#E5C27D" stroke-width="1.6"/>';
+    if (kind === "Capitan") { under = '<path d="M32 33 Q47 42 34 55" fill="none" stroke="#F4EADD" stroke-width="3.2" stroke-linecap="round"/>'; extra = '<path d="M28 11 Q34 -4 50 3" fill="none" stroke="#EA86A2" stroke-width="1.6"/>'; }
+    return '<svg viewBox="0 0 64 64" aria-hidden="true">' + body.replace("FILL", fill) + extra + eyes + under + "</svg>";
+  }
+
+  /* ---------- Contenu ---------- */
+  var GUESTS = [
+    ["Camille Roche", 25, "Colombine", "Externe en médecine. Amie de Léo depuis le lycée, elle ne rate aucun bal.", "Depuis 2019"],
+    ["Yanis Benali", 26, "Pierrot", "Développeur web. Ami de Léo depuis la fac, c'est lui qui a monté ce site.", "Depuis 2020"],
+    ["Hugo Delattre", 28, "Pantalon", "Travaille à la banque de son père. Fait de chaque soirée un concours.", "Depuis 2021"],
+    ["Mathis Gauthier", 29, "Il Dottore", "Doctorant en chimie. Arrive toujours à vélo, quel que soit le temps.", "Depuis 2021"],
+    ["Éloïse Valmont", 23, "Scaramouche", "Sœur cadette de Léo et copropriétaire du pavillon.", "Depuis 2019"],
+    ["Noa Lefèvre", 25, "Arlequin", "Animateur de soirées. Le bouffon du groupe, celui qui fait rire quand tout devient trop sérieux.", "Depuis 2022"],
+    ["Margot Fontaine", 27, "Brighella", "Régisseuse de spectacles. Lumières, décors, accessoires : le bal lui doit beaucoup.", "Depuis 2020"],
+    ["Sacha Marchetti", 27, "Capitan", "Chef cuisinier et traiteur. Il signe le buffet de chaque bal depuis 2021.", "Depuis 2021"]
+  ];
+
+  var MASKS = [
+    ["Colombine", "La lucide", "Servante vive et franche, elle est la seule à dire tout haut ce que les autres pensent tout bas. Un masque fin, souvent orné d'une plume."],
+    ["Pierrot", "Le rêveur", "Visage blanc, larme au coin de l'œil. Il croit tout le monde sur parole et en souffre régulièrement."],
+    ["Arlequin", "Le bouffon", "Costume en losanges, agilité et mauvais tours. Il fait rire pour éviter qu'on lui pose des questions."],
+    ["Pantalon", "Le vieux marchand", "Long nez, bourse bien gardée. Il aime l'argent, le jeu et le prestige, dans cet ordre."],
+    ["Il Dottore", "Le docteur", "Savant autoproclamé qui cite le latin et se trompe avec aplomb. Il observe plus qu'il ne le prétend."],
+    ["Scaramouche", "Le fanfaron noir", "Tout de noir vêtu, brave en paroles et prudent en actes. Il sait toujours par où sortir."],
+    ["Brighella", "L'intrigant", "Valet rusé qui connaît tous les secrets de la maison et sait quand les taire."],
+    ["Capitan", "Le vantard", "Moustache en croc, épée qui ne sort jamais. Il parle fort pour couvrir ce qu'il craint."]
+  ];
+
+  var TRIBUTES = [
+    ["Camille", "Colombine", "14 octobre", "Je n'arrive pas à croire qu'il soit parti comme ça, dans cette maison qu'il connaissait par cœur. Je me suis occupée des obsèques. Il m'aurait reproché d'avoir choisi les mauvaises fleurs."],
+    ["Yanis", "Pierrot", "14 octobre", "Léo m'a demandé de monter ce site il y a trois ans. Il voulait que les bals aient une mémoire. Je le laisse en ligne tel qu'il l'a voulu."],
+    ["Hugo", "Pantalon", "15 octobre", "Léo m'a appris à perdre avec élégance. Je lui dois plus que je ne saurais dire."],
+    ["Mathis", "Il Dottore", "15 octobre", "Il repérait toujours celui qui trichait, aux cartes comme dans la vie. Je me suis souvent demandé ce qu'il avait vu chez moi."],
+    ["Éloïse", "Scaramouche", "15 octobre", "C'est moi qui l'ai trouvé. Je n'ai pas envie d'en parler ici. Venez au bal, c'est ce qu'il aurait voulu."],
+    ["Noa", "Arlequin", "16 octobre", "Qui va me faire rire quand tout sera trop sérieux ? Léo riait de mes blagues, même les mauvaises. Surtout les mauvaises."],
+    ["Margot", "Brighella", "16 octobre", "Il laissait toujours une porte entrouverte pour les retardataires. Depuis, je vérifie les serrures deux fois en partant."],
+    ["Sacha", "Capitan", "16 octobre", "Je prépare le buffet comme chaque année. Léo savait toujours ce qui se passait dans ma cuisine, même quand je ne disais rien."]
+  ];
+
+  var FAQ = [
+    ["Faut-il être costumé ?", "Oui : années 20 et masque. Le masque vous est remis à l'arrivée, mais vous pouvez apporter le vôtre. Smoking ou costume sombre, robe à franges, gants et bijoux de scène sont les bienvenus."],
+    ["À quelle heure arriver ?", "À partir de 20h. Le dîner est à 21h et le livret de Léo s'ouvre à 22h20 : mieux vaut ne pas arriver après."],
+    ["Comment se passe le jeu ?", "Il se joue ensemble, autour d'un livret laissé par Léo, avec quelques objets à fouiller et des cadenas à ouvrir. Il dure un peu moins de deux heures et s'arrête avant minuit. Aucune connaissance particulière n'est nécessaire."],
+    ["Faut-il apporter quelque chose ?", "Un stylo, un smartphone chargé (le site vous servira peut-être) et de bonnes chaussures. Le reste est sur place."],
+    ["Où se garer ?", "Dans la cour du pavillon, à droite après le portail. La route des Rosiers est étroite et sans éclairage : roulez doucement, et signez le registre en repartant."],
+    ["Et pour les repas particuliers ?", "Prévenez Sacha avant le 20 décembre en cas d'allergie ou de régime : il adaptera le buffet."],
+    ["Peut-on dormir sur place ?", "Quelques couchages sont possibles dans les chambres du pavillon, sur réservation auprès d'Éloïse. Le registre existe d'abord pour savoir que chacun est rentré sain et sauf."]
+  ];
+
+  /* ---------- Planches illustrées ---------- */
+  var PLATES = {
+    facade: ['Le pavillon, côté cour', '<rect y="0" width="400" height="170" fill="url(#sk)"/><circle cx="330" cy="50" r="20" fill="#F4EADD" opacity=".85"/><polygon points="60,150 200,92 340,150" fill="#2B1823" stroke="#E5C27D" stroke-width="1.5"/><rect x="70" y="150" width="260" height="110" fill="#33202B" stroke="#E5C27D" stroke-width="1.5"/><g stroke="#A9854A" stroke-width="2"><line x1="90" y1="150" x2="90" y2="260"/><line x1="130" y1="150" x2="130" y2="260"/><line x1="270" y1="150" x2="270" y2="260"/><line x1="310" y1="150" x2="310" y2="260"/></g><path d="M180 260 V205 Q200 180 220 205 V260Z" fill="#130810" stroke="#E5C27D"/><g fill="#E5C27D" opacity=".85"><rect x="100" y="180" width="22" height="34" rx="11"/><rect x="140" y="180" width="22" height="34" rx="11"/><rect x="238" y="180" width="22" height="34" rx="11"/><rect x="278" y="180" width="22" height="34" rx="11"/></g><rect x="0" y="260" width="400" height="40" fill="#1A0D16"/><g fill="#EA86A2" opacity=".85"><circle cx="40" cy="262" r="6"/><circle cx="56" cy="268" r="5"/><circle cx="350" cy="264" r="6"/><circle cx="366" cy="270" r="5"/><circle cx="150" cy="268" r="4"/><circle cx="250" cy="268" r="4"/></g>'],
+    salle: ['La salle de bal, un soir d\'hiver', '<rect width="400" height="300" fill="#1E0F1B"/><g fill="#29152A" stroke="#E5C27D" stroke-width="1.4"><path d="M40 190 V90 Q70 50 100 90 V190Z"/><path d="M150 190 V90 Q180 50 210 90 V190Z"/><path d="M260 190 V90 Q290 50 320 90 V190Z"/></g><g stroke="#E5C27D" fill="none"><line x1="200" y1="0" x2="200" y2="40"/><circle cx="200" cy="52" r="14"/><path d="M170 62 L230 62 M178 70 L222 70"/></g><g fill="#E5C27D" opacity=".9"><circle cx="172" cy="64" r="3"/><circle cx="200" cy="72" r="3"/><circle cx="228" cy="64" r="3"/></g><polygon points="0,190 400,190 400,300 0,300" fill="#3A2128"/><g stroke="#A9854A" opacity=".5"><line x1="0" y1="230" x2="400" y2="230"/><line x1="0" y1="270" x2="400" y2="270"/><line x1="130" y1="190" x2="60" y2="300"/><line x1="270" y1="190" x2="340" y2="300"/><line x1="200" y1="190" x2="200" y2="300"/></g><g fill="#130810" stroke="#E5C27D"><ellipse cx="170" cy="215" rx="9" ry="14"/><ellipse cx="190" cy="215" rx="9" ry="14"/></g>'],
+    gramophone: ['Le gramophone du premier bal', '<rect width="400" height="300" fill="#2A1620"/><rect x="60" y="230" width="280" height="14" fill="#3A2128" stroke="#A9854A"/><rect x="130" y="170" width="140" height="60" fill="#33202B" stroke="#E5C27D" stroke-width="1.5"/><ellipse cx="200" cy="170" rx="62" ry="10" fill="#130810" stroke="#E5C27D"/><ellipse cx="200" cy="170" rx="22" ry="4" fill="#E5C27D" opacity=".6"/><path d="M215 165 Q290 140 320 60 Q335 30 290 40 Q250 110 205 150Z" fill="#B58B3E" stroke="#E5C27D" stroke-width="1.5"/><path d="M290 40 Q335 30 320 60" fill="#E5C27D" opacity=".5"/><line x1="270" y1="200" x2="300" y2="214" stroke="#E5C27D" stroke-width="3"/><circle cx="302" cy="215" r="5" fill="#E5C27D"/>'],
+    mezzanine: ['La mezzanine vue de la salle', '<rect width="400" height="300" fill="#1E0F1B"/><rect x="0" y="40" width="400" height="14" fill="#33202B" stroke="#E5C27D"/><g stroke="#E5C27D" stroke-width="2"><line x1="20" y1="54" x2="20" y2="110"/><line x1="60" y1="54" x2="60" y2="110"/><line x1="100" y1="54" x2="100" y2="110"/><line x1="140" y1="54" x2="140" y2="110"/><line x1="180" y1="54" x2="180" y2="110"/><line x1="220" y1="54" x2="220" y2="110"/><line x1="260" y1="54" x2="260" y2="110"/><line x1="300" y1="54" x2="300" y2="110"/><line x1="340" y1="54" x2="340" y2="110"/><line x1="380" y1="54" x2="380" y2="110"/></g><rect x="0" y="110" width="400" height="10" fill="#33202B" stroke="#E5C27D"/><g fill="#29152A" stroke="#A9854A"><path d="M20 120 V200 H80 V120"/><path d="M160 120 V200 H220 V120"/><path d="M300 120 V200 H360 V120"/></g><polygon points="0,200 400,200 400,300 0,300" fill="#3A2128"/><g stroke="#A9854A" opacity=".5"><line x1="0" y1="245" x2="400" y2="245"/><line x1="200" y1="200" x2="200" y2="300"/></g>'],
+    loge: ['La loge des artistes', '<rect width="400" height="300" fill="#26131E"/><rect x="110" y="40" width="180" height="170" rx="8" fill="#3B2A35" stroke="#E5C27D" stroke-width="2"/><g fill="#E5C27D"><circle cx="124" cy="56" r="4"/><circle cx="150" cy="50" r="4"/><circle cx="176" cy="46" r="4"/><circle cx="200" cy="44" r="4"/><circle cx="224" cy="46" r="4"/><circle cx="250" cy="50" r="4"/><circle cx="276" cy="56" r="4"/><circle cx="124" cy="194" r="4"/><circle cx="276" cy="194" r="4"/><circle cx="124" cy="125" r="4"/><circle cx="276" cy="125" r="4"/></g><path d="M160 135 Q162 100 200 102 Q238 100 240 135 Q236 160 218 162 Q208 166 200 152 Q192 166 182 162 Q164 160 160 135Z" fill="#29152A" stroke="#E5C27D" stroke-width="1.4"/><g fill="#130810" stroke="#E5C27D"><ellipse cx="184" cy="130" rx="9" ry="5"/><ellipse cx="216" cy="130" rx="9" ry="5"/></g><rect x="90" y="210" width="220" height="14" fill="#33202B" stroke="#A9854A"/><rect x="40" y="240" width="90" height="46" fill="#33202B" stroke="#A9854A"/><rect x="270" y="240" width="90" height="46" fill="#33202B" stroke="#A9854A"/>'],
+    masques: ['Trois masques de la collection', '<rect width="400" height="300" fill="#2A1620"/><rect x="0" y="230" width="400" height="70" fill="#1A0D16"/><g stroke="#E5C27D" stroke-width="2"><path d="M30 120 Q32 70 90 74 Q148 70 150 120 Q148 165 118 168 Q104 172 90 150 Q76 172 62 168 Q32 165 30 120Z" fill="#29152A"/><path d="M170 120 Q172 70 230 74 Q288 70 290 120 Q288 165 258 168 Q244 172 230 150 Q216 172 202 168 Q172 165 170 120Z" fill="#F4EADD"/><path d="M310 120 Q312 70 360 74 Q398 70 392 120 Q388 165 366 168 Q350 172 345 150 Q330 172 322 168 Q312 165 310 120Z" fill="#130810"/></g><g fill="#130810" stroke="#E5C27D"><ellipse cx="64" cy="112" rx="14" ry="8"/><ellipse cx="116" cy="112" rx="14" ry="8"/><ellipse cx="204" cy="112" rx="14" ry="8"/><ellipse cx="256" cy="112" rx="14" ry="8"/><ellipse cx="338" cy="112" rx="12" ry="7"/><ellipse cx="368" cy="112" rx="12" ry="7"/></g><path d="M222 128 Q214 146 224 152" fill="none" stroke="#A9854A" stroke-width="3"/><g stroke="#A9854A" stroke-width="3"><line x1="90" y1="168" x2="90" y2="230"/><line x1="230" y1="168" x2="230" y2="230"/><line x1="350" y1="168" x2="350" y2="230"/></g>'],
+    elixir: ['L\'Élixir des Rosiers, flacon des années 60', '<rect width="400" height="300" fill="#2A1620"/><rect x="0" y="250" width="400" height="50" fill="#1A0D16"/><path d="M180 40 H220 V80 Q250 100 252 140 V250 H148 V140 Q150 100 180 80Z" fill="#5A1530" stroke="#E5C27D" stroke-width="2" opacity=".95"/><rect x="176" y="24" width="48" height="20" fill="#A9854A" stroke="#E5C27D"/><rect x="160" y="150" width="80" height="70" fill="#F4EADD" opacity=".92"/><text x="200" y="182" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#5A1530">LV</text><text x="200" y="204" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#5A1530">ÉLIXIR DES ROSIERS</text><g fill="#EA86A2"><circle cx="90" cy="262" r="8"/><circle cx="110" cy="270" r="6"/><circle cx="310" cy="264" r="8"/><circle cx="292" cy="272" r="6"/></g>'],
+    registre: ['Le portail et le registre des départs', '<rect width="400" height="300" fill="#1C0E19"/><circle cx="330" cy="46" r="16" fill="#F4EADD" opacity=".8"/><g fill="#33202B" stroke="#E5C27D" stroke-width="1.5"><rect x="60" y="80" width="40" height="190"/><rect x="300" y="80" width="40" height="190"/></g><g fill="#E5C27D"><circle cx="80" cy="72" r="9"/><circle cx="320" cy="72" r="9"/></g><g stroke="#A9854A" stroke-width="2"><line x1="100" y1="130" x2="300" y2="130"/><line x1="100" y1="200" x2="300" y2="200"/><line x1="130" y1="130" x2="130" y2="270"/><line x1="170" y1="130" x2="170" y2="270"/><line x1="210" y1="130" x2="210" y2="270"/><line x1="250" y1="130" x2="250" y2="270"/></g><rect x="150" y="210" width="100" height="40" fill="#F4EADD" stroke="#A9854A"/><g stroke="#5A1530" stroke-width="1.4"><line x1="160" y1="222" x2="240" y2="222"/><line x1="160" y1="232" x2="226" y2="232"/><line x1="160" y1="242" x2="234" y2="242"/></g><rect x="0" y="270" width="400" height="30" fill="#130810"/>']
+  };
+  var GLOW = { facade: [200, 215], salle: [200, 58], gramophone: [250, 120], mezzanine: [200, 90], loge: [200, 125], masques: [200, 125], elixir: [200, 150], registre: [330, 46] };
+  function glow(kind) {
+    var g = GLOW[kind], x = g[0], y = g[1], out = '<circle cx="' + x + '" cy="' + y + '" r="150" fill="url(#gl-' + kind + ')" style="mix-blend-mode:screen"/><g filter="url(#bk-' + kind + ')" fill="#FFD58A" style="mix-blend-mode:screen">';
+    [[-110, -30, 9, .3], [-60, 40, 6, .25], [70, -50, 8, .28], [120, 20, 11, .22], [20, 70, 7, .2], [-150, 50, 10, .18], [160, -40, 6, .2]].forEach(function (b) { out += '<circle cx="' + (x + b[0]) + '" cy="' + (y + b[1]) + '" r="' + b[2] + '" opacity="' + b[3] + '"/>'; });
+    return out + "</g>";
+  }
+  function plate(kind, cap) {
+    var p = PLATES[kind];
+    return '<figure class="photo"><svg viewBox="0 0 400 300" role="img" aria-label="' + p[0] + '"><defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#130810"/><stop offset="1" stop-color="#3C2233"/></linearGradient><radialGradient id="vg-' + kind + '" cx=".5" cy=".5" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".65"/></radialGradient><filter id="gr-' + kind + '"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 .9  0 0 0 0 .8  0 0 0 0 .6  0 0 0 .22 0"/></filter><filter id="soft-' + kind + '"><feGaussianBlur stdDeviation=".55"/></filter><filter id="bk-' + kind + '"><feGaussianBlur stdDeviation="4"/></filter><radialGradient id="gl-' + kind + '"><stop offset="0" stop-color="#FFD58A" stop-opacity=".55"/><stop offset="1" stop-color="#FFD58A" stop-opacity="0"/></radialGradient></defs><g filter="url(#soft-' + kind + ')">' + p[1] + '</g>' + glow(kind) + '<rect width="400" height="300" filter="url(#gr-' + kind + ')"/><rect width="400" height="300" fill="url(#vg-' + kind + ')"/></svg><figcaption>' + (cap || p[0]) + '<span>Archives Valmont</span></figcaption></figure>';
+  }
+
+  /* ---------- Revue de presse ---------- */
+  var ARTICLES = {
+    vente: { src: "Le Courrier du Layon", date: "12 mai 2016", title: "Valmont change de mains", chapo: "La maison de liqueurs angevine, fondée en 1921, passe sous le contrôle du groupe Aubrière.", plate: null,
+      body: ["C'est la fin d'une histoire familiale de quatre-vingt-quinze ans. La Maison Valmont, connue dans tout le Maine-et-Loire pour son Élixir des Rosiers, a annoncé hier la cession de l'ensemble de ses activités au groupe Aubrière. Selon des sources proches du dossier, l'opération porterait sur environ 38 millions d'euros.", "Les cent quarante salariés sont maintenus, et le nouveau propriétaire a promis de conserver la recette de l'Élixir ainsi que la distillerie d'Angers. « Nous reprenons une marque, mais surtout un savoir-faire », a déclaré son président lors d'une conférence de presse.", "Le produit de la vente sera réparti entre plusieurs héritiers de la famille, dont le plus jeune, Léo Valmont, 18 ans, n'a pas souhaité s'exprimer. Le Pavillon des Rosiers, résidence d'été construite en 1926, n'est pas concerné par l'accord. Il reste pour l'instant fermé."] },
+    reouverture: { src: "L'Écho des Rosiers", date: "21 septembre 2018", title: "Le pavillon des Rosiers rouvre ses volets", chapo: "Deux ans après la vente de la maison de liqueurs, les héritiers remettent en état la résidence d'été des Valmont.", plate: "facade",
+      body: ["Depuis le printemps, les camions de menuisiers et de peintres se succèdent route des Rosiers. Le pavillon, construit en 1926 pour recevoir les clients de la maison Valmont, avait été fermé à la vente de la distillerie. Il retrouve peu à peu ses parquets, ses miroirs et ses lustres d'origine.", "À la tête du chantier, Léo Valmont, 20 ans, étudiant en histoire de l'art, et sa sœur Éloïse, qui ont décidé de garder la maison. « Je ne veux pas en faire un musée, explique le jeune homme. Je veux qu'on y danse à nouveau. »", "Aucune date n'est encore fixée, mais le propriétaire laisse entendre qu'une fête pourrait avoir lieu pour la fin de l'année suivante. Les voisins, eux, sont partagés entre curiosité et inquiétude pour leurs soirées."] },
+    premier: { src: "L'Écho des Rosiers", date: "3 janvier 2020", title: "Le bal dont on parle", chapo: "Vingt-quatre invités masqués ont dansé jusqu'à l'aube dans un pavillon des années 1920.", plate: "gramophone",
+      body: ["Il y avait des plumes, des gants longs, des masques vénitiens et un gramophone, dans la nuit du 31 décembre, au Pavillon des Rosiers. Le jeune Léo Valmont, 21 ans, y recevait pour la première fois une vingtaine d'amis et de connaissances, pour un « bal des masques » à l'ancienne.", "Au programme : un buffet, des valses, et un jeu que l'hôte avait préparé en secret. Sept masques étaient cachés dans la maison, et une clé au fond du cornet du gramophone ouvrait un coffret. « Personne n'a trouvé le septième avant trois heures du matin », reconnaît-il en riant.", "Le maître des lieux promet de recommencer l'an prochain. Il a déjà choisi, dit-il, un thème. Il refuse d'en dire plus."] },
+    automates: { src: "Le Courrier du Layon", date: "14 décembre 2022", title: "Les automates de Léo", chapo: "Des mannequins articulés dans la salle de bal : l'héritier des liqueurs d'Anjou prépare son bal le plus étrange.", plate: "salle",
+      body: ["Les habitants de la route des Rosiers ont vu passer, la semaine dernière, un camion plein de mannequins en bois. Ils sont destinés au bal du 31 décembre, que Léo Valmont prépare depuis l'été. Cette année, il s'intitulera « Les Automates ».", "« Il faudra remonter quatre mécanismes dans le bon ordre pour ouvrir la porte du jardin, explique l'organisateur. Si on se trompe, la musique s'arrête. » Il refuse de dire combien de mannequins sont installés, mais promet que certains « parlent ».", "Léo Valmont, qui reçoit désormais une vingtaine d'invités chaque année, finance seul ses soirées. Les voisins, eux, dorment mal : le pavillon est éclairé jusqu'à l'aube."] },
+    archives: { src: "Le Courrier du Layon", date: "2 janvier 2025", title: "Un coffre pour le Nouvel An", chapo: "Le bal de Léo Valmont avait cette année pour thème une bibliothèque et un livre qui mentait.", plate: "mezzanine",
+      body: ["Chaque 31 décembre, Léo Valmont cache un jeu dans sa soirée. Cette année, ses quatorze invités devaient ouvrir un coffre avant minuit, à l'aide d'un livre dont une page ne disait pas la même chose que les autres.", "« La plupart cherchaient une clé, raconte l'un d'eux. Il fallait en réalité lire. » Personne n'est parvenu à ouvrir le coffre à temps, ce qui n'a pas gâché la fête : le toast de minuit a été porté dans la mezzanine, l'orchestre improvisé de deux invités faisant de son mieux.", "Léo Valmont assure qu'il prépare déjà l'édition suivante. « Je ne dis rien. Il suffit de venir. »"] },
+    deces: { src: "Le Courrier du Layon", date: "15 octobre 2026", title: "Mort de Léo Valmont, l'hôte du bal des Rosiers", chapo: "Le jeune héritier des liqueurs d'Anjou avait 28 ans. La gendarmerie conclut à un accident.", plate: "registre",
+      body: ["Léo Valmont a été retrouvé sans vie lundi matin, au pied de la mezzanine de la salle de bal du Pavillon des Rosiers. C'est sa sœur Éloïse qui a découvert son corps, vers 9 heures. Les gendarmes, appelés sur place, concluent à une chute accidentelle survenue dans la nuit de lundi. Aucune trace d'effraction n'a été relevée.", "Le jeune homme de 28 ans était connu dans la région pour le bal masqué qu'il donnait chaque 31 décembre depuis 2019, dans la maison de plaisance que sa famille tenait depuis 1926. Héritier de la Maison Valmont, vendue en 2016, il consacrait une grande partie de sa fortune à ces soirées.", "Ses obsèques ont eu lieu dans l'intimité, organisées par une amie proche. Dans un message, ses amis indiquent que le bal du 31 décembre aura bien lieu, « comme il l'avait préparé ». La famille demande que son deuil soit respecté."] }
+  };
+  var ART_ORDER = ["deces", "archives", "automates", "premier", "reouverture", "vente"];
+  function articleHtml(key) {
+    var a = ARTICLES[key], i = ART_ORDER.indexOf(key);
+    var newer = ART_ORDER[i - 1], older = ART_ORDER[i + 1];
+    return '<p class="eyebrow"><a href="#valmont" style="text-decoration:none">← Les Valmont</a></p>' +
+      '<article class="art"><div class="src">' + a.src + ' · ' + a.date + '</div><h2>' + a.title + '</h2><p class="lede">' + a.chapo + '</p>' + orn() +
+      (a.plate ? plate(a.plate) : "") + a.body.map(function (p) { return "<p>" + p + "</p>"; }).join("") + '</article>' + orn() +
+      '<div class="grid g2">' + (newer ? '<a class="card" href="#presse-' + newer + '"><div class="k">Plus récent</div><h3>' + ARTICLES[newer].title + '</h3></a>' : "<div></div>") +
+      (older ? '<a class="card" href="#presse-' + older + '"><div class="k">Plus ancien</div><h3>' + ARTICLES[older].title + '</h3></a>' : "") + '</div>';
+  }
+  function clipLink(key) {
+    var a = ARTICLES[key];
+    return '<a class="clip" href="#presse-' + key + '"><div class="src">' + a.src + " · " + a.date + "</div><h3>" + a.title + "</h3><p>" + a.chapo + '</p><span class="more">Lire l\'article →</span></a>';
+  }
+
+  var CARNET = [
+    ["1er janvier 2020", "Vingt-quatre invités, dont trois que je ne connaissais pas. Le gramophone grésille mais tient. Camille a trouvé le sixième masque en vingt minutes : à surveiller. Il manque une assiette, et je n'ai aucune idée de laquelle."],
+    ["1er janvier 2022", "Les Illusionnistes. Le gâteau a disparu et personne n'avoue. Sacha jure qu'il ne l'a pas vu. Je le crois à moitié, ce qui est déjà beaucoup avec Sacha. Hugo a perdu aux cartes avec élégance ; je lui ai prêté de quoi rentrer en taxi. À noter : ne pas lui rappeler."],
+    ["2 janvier 2023", "Les mannequins ont fait leur effet. Éloïse a refusé de passer près du troisième jusqu'à la fin de la soirée. Les voisins se sont plaints, Margot a coupé la musique à quatre heures : elle a toujours raison."],
+    ["1er janvier 2024", "Venise dans la salle de bal. Mathis a deviné le miroir en dix minutes, puis fait semblant de chercher pour ne pas gâcher le plaisir des autres. Il est plus gentil qu'il ne le croit."],
+    ["2 janvier 2025", "Noa a fait rire tout le monde à deux heures du matin, au moment où l'on commençait à se disputer pour un cadenas. Merci."],
+    ["2 janvier 2026", "Huit invités, huit masques échangés. Un bal assez étrange, mais personne n'est parti avant une heure. J'ai numérisé le registre du portail : j'y tiens, je ne sais pas encore pourquoi."]
+  ];
+
+  var CARDS = {
+    camille: { histoire: ["Camille et Léo se sont connus en seconde, en préparant ensemble la pièce de fin d'année. Elle a gardé de cette époque un goût certain pour l'organisation et l'art d'avoir raison sans le dire.", "Elle est toujours la première arrivée au pavillon et la dernière à ranger. Cette année, c'est elle qui s'est occupée des obsèques de Léo : une charge que personne d'autre ne s'est proposé de prendre."], masque: "Colombine voit tout et dit ce qu'elle voit, avec le sourire.", souvenir: "En 2019, elle a trouvé le sixième masque en vingt minutes.", liens: "Proche d'Éloïse et de Margot, amie de longue date de Léo.", tenue: "Robe fluide, gants longs, plume dans les cheveux." },
+    yanis: { histoire: ["Yanis a connu Léo à la fac, dans le même couloir de résidence. Il est devenu l'informaticien du groupe : c'est lui qui a construit le site du pavillon et qui en tient les archives.", "Discret, il préfère le clavier aux conversations. En 2020, c'est lui qui avait monté la visioconférence du bal à distance, sans une seule coupure."], masque: "Pierrot croit tout le monde sur parole. C'est sa force et son problème.", souvenir: "En 2020, il a fait tenir huit écrans sans une coupure.", liens: "Proche de Noa et d'Hugo.", tenue: "Costume blanc ou crème, grand col, visage poudré." },
+    hugo: { histoire: ["Hugo a rencontré Léo lors d'une soirée poker en 2021 et ne l'a plus quitté. Il travaille à la banque de son père, ce qui ne l'empêche pas de parier sur tout, y compris sur qui trouvera le septième masque.", "Il aime les grandes entrées, les grands gestes et perdre avec élégance. Léo disait qu'il était le seul à rendre une défaite agréable à regarder."], masque: "Pantalon aime l'argent, le jeu et le prestige, dans cet ordre.", souvenir: "Il a perdu aux cartes en 2021 et a remercié tout le monde.", liens: "Proche de Mathis et de Sacha.", tenue: "Smoking trois pièces, pochette rouge, canne." },
+    mathis: { histoire: ["Mathis et Léo se sont croisés à la bibliothèque universitaire : l'un en chimie, l'autre en histoire de l'art, mais aux mêmes tables, aux mêmes horaires. Mathis prépare un doctorat et arrive au pavillon à vélo, quelle que soit la météo.", "Il observe plus qu'il ne parle, et démonte toute énigme avec une patience qui agace ses amis. En 2023, il a deviné le miroir en dix minutes, puis fait semblant de chercher pour ne pas gâcher le plaisir des autres."], masque: "Il Dottore cite le latin et se trompe avec aplomb. Il observe plus qu'il ne le prétend.", souvenir: "En 2023, le miroir vénitien a tenu dix minutes face à lui.", liens: "Proche d'Hugo et de Camille.", tenue: "Veste de tweed, lunettes rondes, nœud papillon, blouse en option." },
+    eloise: { histoire: ["Éloïse est la petite sœur de Léo et la copropriétaire du pavillon. Elle y a grandi, y a joué et y a retrouvé son frère. Depuis octobre, c'est à elle de décider de l'avenir de la maison.", "Digne, réservée, parfois piquante, elle a longtemps vécu dans l'ombre d'un frère qui occupait toute la pièce. En 2022, elle a refusé de passer près du troisième mannequin jusqu'à la fin de la soirée."], masque: "Scaramouche est brave en paroles et prudent en actes. Il sait toujours par où sortir.", souvenir: "En 2022, un mannequin lui a fait peur toute la soirée.", liens: "Proche de Noa et de Margot, sœur de Léo.", tenue: "Noir intégral, franges, gants, bijoux de scène." },
+    noa: { histoire: ["Noa a rencontré Léo en animant une soirée étudiante. Léo l'a engagé sur-le-champ pour mettre de l'ambiance au deuxième bal, et l'a invité tous les ans depuis.", "Animateur de métier, il fait rire par réflexe, surtout quand la tension monte. En 2024, il a désamorcé à deux heures du matin une dispute pour un cadenas."], masque: "Arlequin fait rire pour éviter qu'on lui pose des questions.", souvenir: "En 2024, un cadenas a manqué de causer une brouille. Il l'a évitée.", liens: "Proche d'Éloïse et de Yanis.", tenue: "Veste à losanges, chapeau, couleurs vives." },
+    margot: { histoire: ["Margot est régisseuse de spectacles. Elle règle les lumières, les décors et les accessoires des bals depuis 2020, et connaît le pavillon mieux que quiconque, jusqu'à la moindre prise électrique.", "Pince-sans-rire, efficace, elle ne dit rien de ses sentiments. En 2022, elle a coupé la musique à quatre heures du matin : elle a toujours raison."], masque: "Brighella connaît tous les secrets de la maison et sait quand les taire.", souvenir: "En 2022, elle a éteint la musique à l'heure qu'elle jugeait raisonnable.", liens: "Proche de Sacha et d'Éloïse.", tenue: "Veste noire de régisseur, gilet, ceinture d'outils." },
+    sacha: { histoire: ["Sacha est chef cuisinier et traiteur. Il signe le buffet de chaque bal depuis 2021, et se targue de n'avoir jamais raté un service. Le gâteau de 2021, qui a disparu dans la nuit, reste la seule tache à son tableau.", "Il parle fort, commande volontiers et rit de ses propres plaisanteries. Peu de gens savent qu'il doute."], masque: "Capitan parle fort pour couvrir ce qu'il craint.", souvenir: "En 2021, un gâteau s'est volatilisé dans sa cuisine.", liens: "Proche de Margot et d'Hugo.", tenue: "Veste de chef, moustache en croc, cuillère-épée." }
+  };
+  var GUEST_IDS = { "Camille Roche": "camille", "Yanis Benali": "yanis", "Hugo Delattre": "hugo", "Mathis Gauthier": "mathis", "Éloïse Valmont": "eloise", "Noa Lefèvre": "noa", "Margot Fontaine": "margot", "Sacha Marchetti": "sacha" };
+  function guestHtml(id) {
+    var g = GUESTS.filter(function (x) { return GUEST_IDS[x[0]] === id; })[0], c = CARDS[id];
+    var idx = GUESTS.indexOf(g), prev = GUESTS[(idx + 7) % 8], next = GUESTS[(idx + 1) % 8];
+    return '<p class="eyebrow"><a href="#invites" style="text-decoration:none">← Les invités</a></p>' +
+      '<div class="gcard"><div class="gh">' + mask(g[2]) + '<div><h2>' + g[0] + '</h2><p class="muted" style="margin:6px 0 0">' + g[2] + ' · ' + g[1] + ' ans · ' + g[4].toLowerCase() + '</p></div></div>' + orn() +
+      '<div class="two"><div><h3 style="margin-bottom:10px">Son histoire</h3>' + c.histoire.map(function (p) { return "<p>" + p + "</p>"; }).join("") +
+      '<h3 style="margin:26px 0 10px">Le masque</h3><p>' + c.masque + '</p>' +
+      '</div>' +
+      '<aside class="stack"><div class="card"><dl class="facts">' + fact("Souvenir de bal", c.souvenir) + fact("Ses proches", c.liens) + fact("Tenue conseillée", c.tenue) + '</dl></div></aside></div></div>' +
+      orn() + '<div class="grid g2"><a class="card" href="#invite-' + GUEST_IDS[prev[0]] + '"><div class="k">Précédent</div><h3>' + prev[0] + '</h3></a><a class="card" href="#invite-' + GUEST_IDS[next[0]] + '"><div class="k">Suivant</div><h3>' + next[0] + '</h3></a></div>';
+  }
+
+  var PAGES = {
+    accueil: function () {
+      return '<section class="hero">' + bigMask() +
+        '<p class="eyebrow">Anjou · depuis 2019</p>' +
+        '<h1>Le Bal<br>des Masques</h1>' +
+        '<p class="lede">Chaque 31 décembre, Léo Valmont ouvrait les portes du Pavillon des Rosiers. Costumes des années 20, masques de commedia dell\'arte et, quelque part dans la soirée, un jeu dont lui seul connaissait toutes les cachettes.</p>' +
+        '<div class="count" id="count" aria-live="off"></div>' +
+        '<p class="when">Le dernier bal · jeudi 31 décembre 2026 · accueil dès 20h</p>' +
+        '<div class="notice"><p>Léo nous a quittés dans la nuit du 12 au 13 octobre 2026. Le dernier bal aura lieu, tel qu\'il l\'avait préparé.</p></div>' +
+        '</section>' + orn() +
+        '<div class="grid g2">' +
+        card("leo", "Le maître des lieux", "Qui était Léo ?", "Vingt-huit ans, soixante-trois masques, une passion pour les cadenas et les gens qui cherchent.") +
+        card("valmont", "La famille et la presse", "Les Valmont et leur fortune", "Une liqueur d\'Anjou, une maison vendue, six articles à lire.") +
+        card("pavillon", "La maison", "Visite du pavillon", "Salle de bal, mezzanine, loge des artistes : le plan des lieux.") +
+        card("bals", "Les éditions", "Sept bals, sept thèmes", "Des Sept Masques de 2019 au Bal des Doubles de l\'an dernier.") +
+        card("masques", "La collection", "Huit masques, huit caractères", "Colombine, Pierrot, Arlequin… Qui porte quoi, et pourquoi.") +
+        card("invites", "Les convives", "Les huit invités", "Huit amis, huit masques. Léo les avait tous choisis.") +
+        '</div>' + orn() +
+        '<blockquote class="quote">On ne danse bien qu\'avec ceux à qui l\'on ne ment pas.<small>Léo Valmont</small></blockquote>' +
+        '<h3 class="sech">À lire en attendant</h3>' +
+        '<div class="grid g3">' +
+        card("carte", "Le buffet", "La carte de Sacha", "Cocktail de l\'Élixir, produits d\'Anjou et toast de minuit.") +
+        
+        card("message", "Verrouillé", "Un message de Léo", "Il a laissé quelques mots pour le dernier bal. Il faut savoir lire pour les ouvrir.") +
+        card("programme", "Jeudi 31 décembre", "Programme et infos pratiques", "Horaires, tenue, stationnement, questions fréquentes.") +
+        '</div>';
+    },
+
+    leo: function () {
+      return '<p class="eyebrow">Portrait</p><h2>Léo Valmont</h2><p class="muted" style="margin-top:6px">17 mai 1998 · 12 octobre 2026</p>' + orn() +
+        '<div class="two"><div>' +
+        '<p>Léo grandit entre Angers et le Pavillon des Rosiers, la maison de plaisance que sa famille tenait depuis les années 1920. Enfant, il passait ses étés à courir dans la salle de bal vide, persuadé qu\'elle cachait une porte secrète. Il n\'en a jamais trouvé, alors il a fini par en fabriquer.</p>' +
+        '<p>Après des études d\'histoire de l\'art à Angers et une année à Venise, d\'où il rapporte ses premiers masques, il rouvre le pavillon fermé depuis plusieurs années. Le premier Bal des Masques a lieu le 31 décembre 2019 : vingt-quatre invités, un gramophone, et une clé cachée au fond de son cornet.</p>' +
+        '<p>Au fil des éditions, le bal devient un rendez-vous. Léo y glisse chaque année un jeu : une énigme, un cadenas, un message qu\'il faut lire à l\'envers. Il aimait dire qu\'on apprend plus sur les gens en les regardant chercher qu\'en les écoutant parler.</p>' +
+        '<h3 style="margin:30px 0 10px">Ce qu\'il aimait</h3>' +
+        '<p>Les masques, dont plus de soixante dans sa collection. Les cadenas anciens, les gramophones, les carnets où il notait tout. Les retardataires, qui sauvent toujours la soirée.</p>' +
+        '<h3 style="margin:30px 0 10px">Ce qu\'il ne supportait pas</h3>' +
+        '<p>Le mensonge poli, les fins de soirée bâclées et les invités qui partent sans dire au revoir.</p>' +
+        '<h3 style="margin:30px 0 14px">Dans son carnet</h3>' +
+        '<div class="stack">' +
+        '<blockquote class="quote" style="font-size:1.5rem">Un bal sans retardataires est un bal sans surprises.</blockquote>' +
+        '<blockquote class="quote" style="font-size:1.5rem">Une porte entrouverte vaut mieux qu\'un grand discours.</blockquote>' +
+        '<blockquote class="quote" style="font-size:1.5rem">On apprend plus sur les gens en les regardant chercher qu\'en les écoutant parler.</blockquote></div>' +
+        '</div><aside class="stack">' +
+        '<div class="card"><dl class="facts">' +
+        fact("Naissance", "17 mai 1998, Angers") + fact("Famille", "Une sœur cadette, Éloïse") + fact("Domicile", "Pavillon des Rosiers") + fact("Études", "Histoire de l\'art, Angers. Un an à Venise") + fact("Collection", "63 masques") + fact("Devise", "On ne danse bien qu\'avec ceux à qui l\'on ne ment pas") + fact("Disparition", "Nuit du 12 au 13 octobre 2026") +
+        '</dl></div>' +
+        '<div class="card"><div class="k">Sa vie en repères</div><ul class="tl" style="margin-top:6px">' +
+        tl("1998", "Naissance", "À Angers, le 17 mai.") + tl("2016", "Vente de Valmont", "Il a dix-huit ans.") + tl("2018", "Le pavillon rouvre", "Avec sa sœur Éloïse.") + tl("2019", "Premier bal", "Le 31 décembre.") +
+        '</ul></div>' +
+        '<div class="notice"><p>Léo a été retrouvé le 13 octobre au matin par sa sœur, au pied de la mezzanine de la salle de bal. La gendarmerie a conclu à une chute accidentelle. La famille demande qu\'on respecte son deuil.</p></div>' +
+        '</aside></div>';
+    },
+
+    valmont: function () {
+      return '<p class="eyebrow">La famille</p><h2>Les Valmont et leur fortune</h2>' +
+        '<p class="lede">Avant d\'être le nom d\'un bal, Valmont était le nom d\'une liqueur.</p>' + orn() +
+        '<ul class="tl">' +
+        tl("1921", "La Maison Valmont", "Armand Valmont fonde à Angers une maison de liqueurs et d\'eaux-de-vie d\'Anjou.") +
+        tl("1926", "Le Pavillon des Rosiers", "Il fait bâtir une résidence d\'été avec une salle de bal pour les clients et les amis de la maison. L\'orchestre jouait sur la mezzanine.") +
+        tl("1964", "L\'Élixir des Rosiers", "Une liqueur d\'écorce d\'orange amère devient la spécialité de la maison, et son nom de marque pendant un demi-siècle.") +
+        tl("2016", "La vente", "La famille cède la Maison Valmont au groupe Aubrière. La presse locale parle d\'une opération d\'environ 38 millions d\'euros, partagée entre plusieurs héritiers.") +
+        tl("2018", "Le pavillon rouvre", "Léo et sa sœur Éloïse gardent le pavillon, fermé depuis la vente. Léo y installe son premier bal.") +
+        '</ul>' + orn() +
+        '<h3 style="margin-bottom:14px">Que reste-t-il ?</h3>' +
+        '<div class="grid g3">' +
+        '<div class="card stat"><div class="n">≈ 4 M€</div><p>La part de Léo dans la vente de 2016, selon les estimations de la presse locale.</p></div>' +
+        '<div class="card stat"><div class="n">35 000 €</div><p>Le budget d\'un bal selon Léo : traiteur, sonorisation, décors, masques et location.</p></div>' +
+        '<div class="card stat"><div class="n">63</div><p>Masques dans sa collection, dont onze rapportés de Venise.</p></div>' +
+        '</div>' +
+        '<p style="margin-top:22px">Léo ne plaçait pas son argent : il le dépensait en fêtes et le prêtait volontiers à ses amis. Il notait chaque prêt dans un carnet, sans jamais le rappeler.</p>' +
+        '<p>Le pavillon et ce qu\'il contient reviennent à sa sœur Éloïse, seule héritière directe. Elle n\'a pas encore décidé de ce qu\'elle en ferait.</p>' +
+        orn() + '<h3 style="margin-bottom:14px">Revue de presse</h3>' +
+        '<div class="stack">' + ART_ORDER.slice().reverse().map(clipLink).join("") +
+        '</div>';
+    },
+
+    pavillon: function () {
+      return '<p class="eyebrow">La maison</p><h2>Le Pavillon des Rosiers</h2>' +
+        '<p class="lede">Bâti en 1926 pour recevoir, restauré en 2018 pour danser. Voici de quoi vous repérer avant d\'y entrer.</p>' + orn() +
+        plate("facade", "Le Pavillon des Rosiers, côté cour") + '<div class="card planbox" style="padding:16px;margin-top:18px">' + plan() + '</div>' +
+        '<div class="grid g2" style="margin-top:18px">' +
+        '<div class="card"><div class="k">La salle de bal</div><p>Parquet en point de Hongrie, miroirs au mur, lustres d\'origine. C\'est là que se tient le bal, le buffet et le pupitre où Léo laissait son livret.</p></div>' +
+        '<div class="card"><div class="k">La mezzanine</div><p>Une galerie en bois et fer forgé qui court au-dessus de la salle. L\'orchestre y jouait en 1926. Elle est interdite d\'accès depuis le mois d\'octobre.</p></div>' +
+        '<div class="card"><div class="k">La loge des artistes</div><p>Une petite pièce derrière la scène, avec ses miroirs à ampoules et ses malles de costumes. Les invités s\'y changent et s\'y repoudrent.</p></div>' +
+        '<div style="grid-column:1/-1">' + plate("loge", "La loge des artistes, ses miroirs à ampoules et ses malles") + '</div>' +
+        '<div class="card"><div class="k">La cour et le portail</div><p>Le stationnement est dans la cour. Au portail, un registre attend les invités : chacun y signe en partant, avec l\'heure.</p></div>' +
+        '</div>';
+    },
+
+    bals: function () {
+      return '<p class="eyebrow">Les éditions</p><h2>Sept bals, sept thèmes</h2>' +
+        '<p class="lede">Chaque année, un thème, une liste d\'invités resserrée et un jeu différent.</p>' + orn() +
+        '<div class="card" style="margin-bottom:26px"><div class="k">Les règles du bal</div><ol style="margin:6px 0 0;padding-left:20px;display:grid;gap:6px;max-width:40rem">' +
+        '<li>On arrive masqué, on repart démasqué.</li><li>On ne parle pas de travail avant minuit.</li>' +
+        '<li>Le toast de minuit se porte avec le verre de son voisin.</li>' +
+        '<li>En partant, chaque invité signe le registre du portail avec l\'heure de son départ. Léo y tenait : la route des Rosiers est sinueuse et il voulait savoir que tout le monde était bien rentré.</li></ol></div>' +
+        plate("gramophone", "Le gramophone du premier bal, 2019") + '<ul class="tl" style="margin-top:22px">' +
+        ed("2019", "Les Sept Masques", "Premier bal. Sept masques cachés dans la maison, une clé au fond du cornet d\'un gramophone. Personne n\'a trouvé le septième avant trois heures du matin.", "24 invités") +
+        ed("2020", "Le Bal à distance", "Couvre-feu dès 20h : Léo organise le bal en visioconférence. Huit écrans, huit tenues, un jeu de piste dans les appartements de chacun.", "8 foyers") +
+        ed("2021", "Les Illusionnistes", "Cartes truquées, boîte à double fond, et un invité qui a fait disparaître le gâteau. Le gâteau n\'a jamais reparu.", "16 invités") +
+        ed("2022", "Les Automates", "Une salle de bal peuplée de mannequins articulés. Il fallait remonter quatre mécanismes dans l\'ordre pour ouvrir la porte du jardin.", "18 invités") +
+        ed("2023", "Le Bal vénitien", "Masques de Venise, gondole en carton au milieu de la salle et indices à lire dans les reflets du grand miroir.", "20 invités") +
+        ed("2024", "Le Bal des Archives", "Une bibliothèque, un coffre, et un livre dont une page ne disait pas la même chose que les autres.", "14 invités") +
+        ed("2025", "Le Bal des Doubles", "Léo n\'avait invité que ses huit plus proches amis. Chacun arrivait sous le masque d\'un autre. La fête s\'est prolongée très tard dans la nuit. Le registre du portail a été numérisé le 2 janvier.", "8 invités") +
+        '<li class="last"><div class="y">2026</div><div><h3>Le dernier bal</h3><p>Préparé par Léo jusqu\'au bout. Jeudi 31 décembre, dès 20h.</p><div class="meta"><a href="#programme">Voir le programme</a></div></div></li>' +
+        '</ul>';
+    },
+
+    masques: function () {
+      return '<p class="eyebrow">La collection</p><h2>Huit masques, huit caractères</h2>' +
+        '<p class="lede">La commedia dell\'arte donne à chaque personnage un masque et un défaut. Léo en a choisi huit pour ses huit amis. À chacun d\'y reconnaître quelqu\'un.</p>' + orn() +
+        '<div style="margin-bottom:18px">' + plate("masques", "Trois masques de la collection de Léo") + '</div><div class="grid g3">' + MASKS.map(function (m) {
+          return '<article class="card mk-card">' + mask(m[0]) + '<h3>' + m[0] + '</h3><div class="role">' + m[1] + '</div><p>' + m[2] + '</p></article>';
+        }).join("") + '</div>';
+    },
+
+    invites: function () {
+      return '<p class="eyebrow">Les convives</p><h2>Les huit invités</h2>' +
+        '<p class="lede">Ceux du bal de l\'an dernier, et ceux de ce soir. Léo avait choisi les masques lui-même, selon ce qu\'il pensait de chacun. Ouvrez une carte pour lire son histoire.</p>' + orn() +
+        
+        '<div class="grid g2">' + GUESTS.map(function (g) {
+          return '<a class="card guest" href="#invite-' + GUEST_IDS[g[0]] + '" style="text-decoration:none;color:inherit">' + mask(g[2]) + '<div><div class="nm">' + g[0] + '</div><div class="mk">' + g[2] + ' · ' + g[1] + ' ans</div></div><p>' + g[3] + '</p><div class="since">' + g[4] + ' · Lire sa fiche →</div></a>';
+        }).join("") + '</div>';
+    },
+
+    hommages: function () {
+      return '<p class="eyebrow">Livre d\'or</p><h2>Hommages</h2>' +
+        '<p class="lede">Les mots de ses amis, laissés entre le 14 et le 16 octobre.</p>' + orn() +
+        '<div class="grid g2">' + TRIBUTES.map(function (t) {
+          return '<figure class="card trib"><blockquote>' + t[3] + '</blockquote><figcaption><b>' + t[0] + '</b> · ' + t[1] + ' · ' + t[2] + '</figcaption></figure>';
+        }).join("") + '</div>';
+    },
+
+    message: function () {
+      var alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map(function (c) { return "<span>" + c + "</span>"; }).join("");
+      var head = '<p class="eyebrow">Un message de Léo</p><h2>Pour ceux qui savent lire</h2>' +
+        '<p class="lede">Léo a enregistré quelques mots pour le dernier bal. Il ne s\'ouvre qu\'à celui qui sait lire ses messages, et pas avant le 26 décembre à 20h.</p>' + orn();
+      if (teaser) return head + teaserHtml(teaser);
+      return head + '<div id="msgbox"></div>';
+    },
+
+    carte: function () {
+      return '<p class="eyebrow">Signée Sacha Marchetti</p><h2>La carte du bal</h2>' +
+        '<p class="lede">Comme chaque année, des produits d\'Anjou, de quoi tenir jusqu\'à l\'aube et un verre pour minuit.</p>' + orn() +
+        '<div style="margin-bottom:18px">' + plate("elixir") + '</div><div class="grid g2"><div class="card menu"><div><h3>À l\'arrivée</h3><ul>' +
+        mi("L\'Élixir des Rosiers", "Le cocktail de la maison : liqueur d\'orange amère, crémant de Loire, glace pilée.") +
+        mi("Rillauds d\'Anjou", "Glacés au miel, servis tièdes.") +
+        mi("Fouaces fourrées", "Aux rillettes d\'oie et aux champignons.") +
+        '</ul></div><div><h3>Le dîner</h3><ul>' +
+        mi("Terrine de sandre au beurre blanc", "Pickles de rose et pain grillé.") +
+        mi("Suprême de volaille de Loué", "Sauce au Savennières, légumes de la Loire.") +
+        mi("Fromages d\'Anjou", "Crémet d\'Anjou, bûchette de chèvre, pain de seigle.") +
+        '</ul></div></div>' +
+        '<div class="card menu"><div><h3>Les douceurs</h3><ul>' +
+        mi("Quernons d\'ardoise", "Le chocolat de la maison, croquant à l\'amande.") +
+        mi("Poires tapées au vin", "Servies avec une crème légère à la vanille.") +
+        mi("Gâteau du dernier bal", "Léo en aurait voulu un. Il ne disparaîtra pas cette année.") +
+        '</ul></div><div><h3>Pour le toast</h3><ul>' +
+        mi("Crémant de Loire brut", "À minuit, avec le verre de son voisin.") +
+        mi("Coteaux du Layon", "Pour ceux qui préfèrent le doux.") +
+        mi("Jus de pomme de Loire", "Pour les autres.") +
+        '</ul></div></div></div>' +
+        '<p class="muted" style="margin-top:16px">Une allergie, un régime ? Prévenez Sacha avant le 20 décembre.</p>';
+    },
+
+    programme: function () {
+      return '<p class="eyebrow">Jeudi 31 décembre 2026</p><h2>Le dernier bal</h2>' +
+        '<p class="lede">Pavillon des Rosiers, Anjou. Les horaires sont ceux de Léo : merci de ne pas les changer.</p>' + orn() +
+        '<ol class="prog">' +
+        pg("20h00", "Accueil", "Cocktail dans la salle de bal. Les masques sont remis à l\'arrivée.") +
+        pg("21h00", "Dîner", "Buffet dînatoire, musique et retrouvailles.") +
+        pg("22h20", "Le livret de Léo", "Ouverture du jeu. Il se joue ensemble et dure un peu moins de deux heures.") +
+        pg("00h00", "Minuit", "Le toast. Les masques tombent.") +
+        '</ol>' + orn() +
+        '<div class="grid g2">' +
+        '<div class="card"><div class="k">Tenue</div><p>Années 20. Smoking ou costume sombre, robe à franges, gants, bijoux de scène. Un masque vous sera remis à l\'arrivée.</p></div>' +
+        '<div class="card"><div class="k">Pratique</div><p>Stationnement dans la cour du pavillon. Apportez un stylo, un smartphone chargé, de bonnes chaussures pour danser, et signez le registre en partant.</p></div>' +
+        '</div>' +
+        '<h3 class="sech">Questions fréquentes</h3>' +
+        FAQ.map(function (f) { return '<details class="faq"><summary>' + f[0] + '</summary><p>' + f[1] + '</p></details>'; }).join("");
+    },
+
+    archives: function () {
+      if (unlocked) return archiveHtml(unlocked);
+      return '<p class="eyebrow">Accès réservé</p><h2>Archives</h2>' +
+        '<p class="lede">Les registres du pavillon, numérisés par Léo. Ils sont réservés aux invités du dernier bal.</p>' + orn() +
+        '<form class="card lock" id="lockform" autocomplete="off"><div class="k">Mot de passe</div>' +
+        '<p class="muted" style="margin:0">Léo l\'a caché dans son jeu. Il se mérite.</p>' +
+        '<div class="field"><input id="pw" type="text" inputmode="text" autocapitalize="characters" spellcheck="false" aria-label="Mot de passe des archives" placeholder="Mot de passe"><button class="btn" id="go" type="submit">Ouvrir</button></div>' +
+        '<div class="err" id="err" role="status"></div></form>';
+    }
+  };
+
+  function archiveHtml(d) {
+    var rows = d.lignes.map(function (r) { return "<tr><td>" + r[0] + "</td><td>" + r[1] + "</td><td>" + r[2] + "</td></tr>"; }).join("");
+    var hist = d.historique.map(function (r) { return "<tr><td>" + r[0] + "</td><td>" + r[1] + "</td><td>" + r[2] + "</td><td>" + r[3] + "</td></tr>"; }).join("");
+    return '<p class="eyebrow">Archives ouvertes</p><h2>' + d.titre + '</h2><p class="muted" style="margin-top:8px">' + d.note + '</p>' + orn() +
+      '<div class="tw"><table><thead><tr><th>Invité</th><th>Masque</th><th>Départ</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+      '<h3 style="margin:34px 0 12px">Historique des modifications</h3>' +
+      '<div class="tw"><table><thead><tr><th>Date</th><th>Compte</th><th>Action</th><th>Détail</th></tr></thead><tbody>' + hist + '</tbody></table></div>';
+  }
+
+  /* ---------- Composants ---------- */
+  function orn() { return '<div class="orn" aria-hidden="true"><i></i></div>'; }
+  function card(route, k, title, text) { return '<a class="card" href="#' + route + '"><div class="k">' + k + '</div><h3>' + title + '</h3><p class="muted">' + text + '</p></a>'; }
+  function fact(k, v) { return "<div><dt>" + k + "</dt><dd>" + v + "</dd></div>"; }
+  function tl(y, t, text) { return '<li><div class="y">' + y + '</div><div><h3>' + t + "</h3><p>" + text + "</p></div></li>"; }
+  function ed(y, t, text, meta) { return '<li><div class="y">' + y + '</div><div><h3>' + t + "</h3><p>" + text + '</p><div class="meta">' + meta + "</div></div></li>"; }
+  function clip(src, title, text) { return '<div class="clip"><div class="src">' + src + "</div><h3>" + title + "</h3><p>" + text + "</p></div>"; }
+  function pg(t, title, text) { return '<li><div class="t">' + t + "</div><div><h3>" + title + "</h3><p>" + text + "</p></div></li>"; }
+  function mi(t, d) { return "<li><b>" + t + "</b><span>" + d + "</span></li>"; }
+  function bigMask() {
+    return '<svg class="hero-mask" viewBox="0 0 120 90" aria-hidden="true"><path d="M8 40 Q10 10 60 14 Q110 10 112 40 Q110 72 82 74 Q70 76 60 62 Q50 76 38 74 Q10 72 8 40Z" fill="#29152A" stroke="#E5C27D" stroke-width="2"/><path d="M14 30 Q60 18 106 30" fill="none" stroke="#A9854A" stroke-width="1"/><ellipse cx="38" cy="42" rx="13" ry="7.5" fill="#130810" stroke="#E5C27D" stroke-width="1.6"/><ellipse cx="82" cy="42" rx="13" ry="7.5" fill="#130810" stroke="#E5C27D" stroke-width="1.6"/><path d="M96 20 Q122 -6 116 40" fill="none" stroke="#E5C27D" stroke-width="2"/><path d="M100 24 Q112 8 112 28" fill="none" stroke="#EA86A2" stroke-width="1.6"/><path d="M52 62 L60 74 L68 62" fill="none" stroke="#A9854A" stroke-width="1.2"/></svg>';
+  }
+  function plan() {
+    return '<svg class="plan" viewBox="0 0 640 360" role="img" aria-label="Plan du pavillon : la cour, le hall, la salle de bal avec sa mezzanine, la loge des artistes, l\'office et le jardin">' +
+      '<rect class="out" x="6" y="6" width="628" height="348"/>' +
+      '<rect class="room" x="30" y="40" width="360" height="220"/><text x="210" y="154" text-anchor="middle" font-size="15">Salle de bal</text><text class="sm" x="210" y="172" text-anchor="middle">parquet, miroirs, buffet</text>' +
+      '<rect class="mez" x="30" y="40" width="360" height="42"/><text class="sm" x="210" y="65" text-anchor="middle">Mezzanine (galerie, accès fermé)</text>' +
+      '<rect class="room" x="410" y="40" width="200" height="100"/><text x="510" y="86" text-anchor="middle">Loge des artistes</text><text class="sm" x="510" y="104" text-anchor="middle">miroirs, malles, costumes</text>' +
+      '<rect class="room" x="410" y="160" width="200" height="100"/><text x="510" y="206" text-anchor="middle">Office</text><text class="sm" x="510" y="224" text-anchor="middle">cuisine de Sacha</text>' +
+      '<rect class="room" x="150" y="260" width="120" height="50"/><text x="210" y="290" text-anchor="middle">Hall d\'entrée</text>' +
+      '<rect class="out" x="30" y="318" width="580" height="28"/><text class="sm" x="320" y="336" text-anchor="middle">Cour et stationnement · portail et registre des départs</text>' +
+      '<text class="sm" x="30" y="30">Jardin</text><text class="sm" x="560" y="30">Jardin</text>' +
+      '</svg>';
+  }
+
+  function teaserHtml(t) {
+    var video = TEASER_VIDEO ? '<video controls playsinline style="width:100%;max-width:46rem;margin-bottom:18px;border:1px solid var(--gold2)" src="' + TEASER_VIDEO + '"></video>' : "";
+    return '<div class="card" style="max-width:46rem"><div class="k">' + t.titre + '</div>' + video + '<p class="muted" style="margin:0 0 14px">' + t.note + '</p><div class="stack">' +
+      t.lignes.map(function (l) { return '<blockquote class="quote" style="font-size:1.6rem">' + l + '</blockquote>'; }).join("") + '</div></div>';
+  }
+  function cdText(ms) {
+    var d = Math.floor(ms / 864e5), h = Math.floor(ms % 864e5 / 36e5), m = Math.floor(ms % 36e5 / 6e4);
+    return d + " j " + h + " h " + m + " min";
+  }
+  function wireMessage() {
+    var box = document.getElementById("msgbox"); if (!box) return;
+    function tryOpen(pw, fromStore) {
+      return openVault(pw, VAULT2).then(function (d) {
+        lsSet("pdr-msg", pw);
+        if (Date.now() >= OPEN_AT) { teaser = d; show(); return; }
+        box.innerHTML = '<div class="card" style="max-width:34rem"><div class="k">Mot de passe accepté</div><p>Léo vous attend. Son message s\'ouvrira le 26 décembre à 20h00, dans <b id="cd">' + cdText(OPEN_AT - Date.now()) + '</b>.</p><p class="muted" style="margin:0">Revenez sur cette page à ce moment-là : vous n\'aurez pas à retaper le mot de passe.</p></div>';
+        var iv = setInterval(function () { var el = document.getElementById("cd"); if (!el) { clearInterval(iv); return; } var left = OPEN_AT - Date.now(); if (left <= 0) { clearInterval(iv); tryOpen(pw, true); } else el.textContent = cdText(left); }, 1000);
+      }, function (x) { if (!fromStore) throw x; drawForm(); });
+    }
+    function drawForm() {
+      var alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map(function (c) { return "<span>" + c + "</span>"; }).join("");
+      box.innerHTML = '<form class="card lock" id="msgform" autocomplete="off" style="max-width:34rem"><div class="k">Mot de passe chiffré</div>' +
+        '<p style="margin:0 0 10px">« J\'ai chiffré ce mot comme je chiffre tout : en décalant chaque lettre d\'autant de pas que j\'ai donné de bals. » <span class="muted">Léo</span></p>' +
+        '<div class="cipher" aria-label="LUAYHJAL">LUAYHJAL</div>' +
+        '<div class="alpha" aria-hidden="true">' + alpha + '</div>' +
+        '<div class="field"><input id="mpw" type="text" spellcheck="false" autocapitalize="characters" aria-label="Mot de passe déchiffré" placeholder="Le mot déchiffré"><button class="btn" id="mgo" type="submit">Ouvrir</button></div><div class="err" id="merr" role="status"></div>' +
+        '<details class="faq"><summary>Un indice</summary><p>Combien de bals Léo a-t-il donnés avant le dernier ? La page « Les bals » vous le dit.</p></details>' +
+        '<details class="faq"><summary>Un autre indice</summary><p>Le texte a été décalé vers l\'avant dans l\'alphabet. Pour le lire, reculez d\'autant de pas.</p></details></form>';
+      var f = document.getElementById("msgform"), err = document.getElementById("merr"), go = document.getElementById("mgo"), pw = document.getElementById("mpw");
+      f.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var v = normalize(pw.value); if (!v) { err.textContent = "Entrez le mot déchiffré."; return; }
+        go.disabled = true; err.textContent = "";
+        tryOpen(v, false).then(function () {}, function (x) { go.disabled = false; err.textContent = x && x.message === "nocrypto" ? "Ce navigateur ne peut pas ouvrir le message. Essayez-en un autre." : "Ce n'est pas le bon mot. Relisez le message de Léo."; pw.select(); });
+      });
+    }
+    var saved = lsGet("pdr-msg");
+    if (saved) tryOpen(saved, true); else drawForm();
+  }
+
+  /* ---------- Compte à rebours ---------- */
+  var target = new Date(2026, 11, 31, 20, 0, 0).getTime(), timer = null;
+  function tick() {
+    var el = document.getElementById("count");
+    if (!el) { clearInterval(timer); timer = null; return; }
+    var t = target - Date.now();
+    if (t <= 0) { el.textContent = "Le bal a lieu ce soir."; return; }
+    var d = Math.floor(t / 864e5), h = Math.floor(t % 864e5 / 36e5), m = Math.floor(t % 36e5 / 6e4), sec = Math.floor(t % 6e4 / 1e3);
+    el.innerHTML = box(d, d > 1 ? "jours" : "jour") + box(h, "heures") + box(m, "minutes") + box(sec, "secondes");
+  }
+  function box(n, l) { return "<div><b>" + n + "</b><span>" + l + "</span></div>"; }
+
+  /* ---------- Navigation ---------- */
+  var MENU = [
+    ["accueil", "Accueil"],
+    ["Léo", [["leo", "Portrait de Léo"], ["message", "Un message de Léo"], ["valmont", "Les Valmont et la presse"], ["hommages", "Hommages"]]],
+    ["Le lieu", [["pavillon", "Le pavillon"], ["bals", "Les bals"], ["carte", "La carte"]]],
+    ["Les invités", [["invites", "Les huit invités"], ["masques", "Les masques"]]],
+    ["programme", "Programme"],
+    ["archives", "Archives"]
+  ];
+  var ROUTES = [];
+  MENU.forEach(function (m) { if (typeof m[1] === "string") ROUTES.push(m); else m[1].forEach(function (r) { ROUTES.push(r); }); });
+  function renderNav(cur) {
+    var nav = document.getElementById("nav");
+    nav.innerHTML = MENU.map(function (m, i) {
+      if (typeof m[1] === "string") return '<a href="#' + m[0] + '"' + (m[0] === cur ? ' aria-current="page"' : "") + ">" + m[1] + "</a>";
+      var here = m[1].some(function (r) { return r[0] === cur; });
+      return '<div class="grp"><button type="button" class="top' + (here ? " here" : "") + '" aria-expanded="false" aria-controls="sub' + i + '">' + m[0] + '</button><div class="sub" id="sub' + i + '">' +
+        m[1].map(function (r) { return '<a href="#' + r[0] + '"' + (r[0] === cur ? ' aria-current="page"' : "") + ">" + r[1] + "</a>"; }).join("") + "</div></div>";
+    }).join("");
+  }
+  (function wireNav() {
+    var nav = document.getElementById("nav");
+    function closeAll(except) { [].forEach.call(nav.querySelectorAll(".grp"), function (g) { if (g !== except) { g.classList.remove("open"); g.firstChild.setAttribute("aria-expanded", "false"); } }); }
+    function open(g) {
+      closeAll(g); g.classList.add("open"); g.firstChild.setAttribute("aria-expanded", "true");
+      var sub = g.querySelector(".sub"); sub.classList.remove("r");
+      if (g.getBoundingClientRect().left + sub.offsetWidth > document.documentElement.clientWidth - 8) sub.classList.add("r");
+    }
+    nav.addEventListener("click", function (e) {
+      var b = e.target.closest && e.target.closest("button.top");
+      if (b) { var g = b.parentNode; if (g.classList.contains("open")) closeAll(); else open(g); }
+      else if (e.target.closest && e.target.closest(".sub a")) closeAll();
+    });
+    nav.addEventListener("mouseover", function (e) {
+      if (!window.matchMedia || !window.matchMedia("(hover: hover)").matches) return;
+      var g = e.target.closest && e.target.closest(".grp"); if (g && !g.classList.contains("open")) open(g);
+    });
+    nav.addEventListener("mouseleave", function () { if (window.matchMedia && window.matchMedia("(hover: hover)").matches) closeAll(); });
+    document.addEventListener("click", function (e) { if (!nav.contains(e.target)) closeAll(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeAll(); });
+  })();
+  function show() {
+    var id = location.hash.replace("#", ""), navId, html, title;
+    if (id.indexOf("invite-") === 0 && CARDS[id.slice(7)]) { navId = "invites"; html = guestHtml(id.slice(7)); title = GUESTS.filter(function (x) { return GUEST_IDS[x[0]] === id.slice(7); })[0][0]; }
+    else if (id.indexOf("presse-") === 0 && ARTICLES[id.slice(7)]) { navId = "valmont"; html = articleHtml(id.slice(7)); title = ARTICLES[id.slice(7)].title; }
+    else {
+      if (!PAGES[id]) id = "accueil";
+      navId = id; html = PAGES[id]();
+      title = id === "accueil" ? "" : ROUTES.filter(function (r) { return r[0] === id; })[0][1];
+    }
+    document.getElementById("view").innerHTML = html;
+    renderNav(navId);
+    window.scrollTo(0, 0);
+    document.title = title ? title + " · Pavillon des Rosiers" : "Pavillon des Rosiers";
+    if (id === "accueil") { tick(); clearInterval(timer); timer = setInterval(tick, 1000); }
+    if (id === "archives" && !unlocked) wireLock();
+    if (id === "message" && !teaser) wireMessage();
+  }
+  function wireLock() {
+    var form = document.getElementById("lockform"), err = document.getElementById("err"), go = document.getElementById("go"), pw = document.getElementById("pw");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var v = normalize(pw.value);
+      if (!v) { err.textContent = "Entrez le mot de passe."; return; }
+      go.disabled = true; err.textContent = "";
+      openVault(v).then(function (d) { unlocked = d; show(); }, function (x) {
+        go.disabled = false;
+        err.textContent = x && x.message === "nocrypto" ? "Ce navigateur ne peut pas ouvrir les archives. Essayez-en un autre." : "Ce n'est pas le bon mot de passe.";
+        pw.select();
+      });
+    });
+  }
+  window.addEventListener("hashchange", show);
+  show();
+})();
+</script>
+</body>
+</html>
